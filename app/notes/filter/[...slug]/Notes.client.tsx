@@ -25,12 +25,6 @@ export default function NotesClient({ valTag }: NotesClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isOpenModal, setisOpenModal] = useState(false);
 
-  // useEffect(() => {
-  //   if (valTag) {
-  //     setTag(valTag);
-  //   }
-  // }, [valTag]);
-
   const tag = valTag;
 
   const {
