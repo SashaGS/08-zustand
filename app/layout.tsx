@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto } from "next/font/google"; 
 import "./globals.css";
 
 import Header from "@/components/Header/Header";
@@ -16,16 +17,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const roboto = Roboto({
+  variable: "--font-roboto",
+  subsets: ["latin", "cyrillic"],
+  display: "swap",
+  weight: ["300", "400", "500", "700"],
+});
+
 export const metadata: Metadata = {
   title:{ default:"NoteHub",
-  template: "%s | NoteHub",
+    template: "%s | NoteHub",
   },
   metadataBase: "https://notehub.com/",
   description: "Capture your thoughts, organize your tasks, and manage your notes in one convenient NoteHub app.",
   openGraph: {
     title: "NoteHub",
     description: "Capture your thoughts, organize your tasks",
-    url: "/",
+    url: "https://notehub.com/",
     images: [{
       url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
         width: 1200,
@@ -43,7 +51,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children, modal }: RootLayoutProps) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body>
+      <body className={`${roboto.className} ${roboto.variable}`}>
         <TanstackProvider>
           <Header />
           <main>
