@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import toast, { Toaster } from "react-hot-toast";
 import { useDebouncedCallback } from "use-debounce";
-
+import { useRouter } from "next/navigation";
 import { fetchNotes } from "@/lib/api/api";
 
 import Modal from "../../../../components/Modal/Modal";
@@ -23,7 +23,7 @@ export default function NotesClient({ valTag }: NotesClientProps) {
   const [search, setSearch] = useState("");
   // const [tag, setTag] = useState(valTag);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isOpenModal, setisOpenModal] = useState(false);
+  // const [isOpenModal, setisOpenModal] = useState(false);
 
   const tag = valTag;
 
@@ -41,9 +41,9 @@ export default function NotesClient({ valTag }: NotesClientProps) {
     refetchOnMount: false,
   });
 
-  const handleClick = () => {
-    setisOpenModal(!isOpenModal);
-  };
+  // const handleClick = () => {
+  //   setisOpenModal(!isOpenModal);
+  // };
   const updateSearchQuery = useDebouncedCallback((value: string) => {
     setSearch(value);
     setCurrentPage(1);
@@ -68,7 +68,7 @@ export default function NotesClient({ valTag }: NotesClientProps) {
         )}
 
         {
-          <button className={css.button} onClick={handleClick}>
+          <button className={css.button} onClick={() => useRouter().push("/notes/action/create")}>
             Create note +
           </button>
         }
@@ -83,11 +83,11 @@ export default function NotesClient({ valTag }: NotesClientProps) {
           },
         }}
       />
-      {isOpenModal && (
+      {/* {isOpenModal && (
         <Modal onClose={handleClick} isOpen={isOpenModal}>
           <NoteForm onClose={handleClick} />
         </Modal>
-      )}
+      )} */}
 
       {isSuccess && notes && <NoteList notes={notes?.notes} />}
     </div>
