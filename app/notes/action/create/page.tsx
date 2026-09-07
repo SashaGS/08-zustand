@@ -29,7 +29,7 @@ export default function CreateNotePage() {
     <main className={css.main}>
         <div className={css.container}>
             <h1 className={css.title}>Create note</h1>
-	        <NoteForm onClose={()=>{}}/>// надо доделать onClose, чтобы закрывать модалку после создания заметки
+	        <NoteForm />// надо доделать onClose, чтобы закрывать модалку после создания заметки
         </div>
     </main>
   );

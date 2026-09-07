@@ -1,22 +1,27 @@
+"use client";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import css from "./NoteForm.module.css";
 import { useId } from "react";
 import { addNote } from "../../lib/api/api";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-interface NoteFormProps {
-  onClose: () => void;
-}
+// interface NoteFormProps {
+//   onClose: () => void;
+// }
 
-function NoteForm({ onClose }: NoteFormProps) {
+function NoteForm() {
   const queryClient = useQueryClient();
   const fieldId = useId();
+  const router = useRouter();
 
   const { mutate } = useMutation({
     mutationFn: addNote,
     onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ["note"] });
-      onClose();
+      // queryClient.invalidateQueries({ queryKey: ["note"], exact: false });
+      queryClient.refetchQueries({ queryKey: ["note"], exact: false });
+      router.back();
     },
     onError(error) {
       toast(`Error adding note ${error}`);
@@ -35,6 +40,10 @@ function NoteForm({ onClose }: NoteFormProps) {
     } catch (error) {
       toast(`Error adding note ${error}`);
     }
+  }
+
+  const handleCancel = () => {
+    router.back();
   }
 
   return (
@@ -81,7 +90,7 @@ function NoteForm({ onClose }: NoteFormProps) {
           <button
             type="button"
             className={css.cancelButton}
-            onClick={onClose}
+            onClick={handleCancel}
           >
             Cancel
           </button>

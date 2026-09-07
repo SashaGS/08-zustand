@@ -7,11 +7,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { useDebouncedCallback } from "use-debounce";
 import { useRouter } from "next/navigation";
 import { fetchNotes } from "@/lib/api/api";
-
-import Modal from "../../../../components/Modal/Modal";
 import SearchBox from "../../../../components/SearchBox/SearchBox";
 import NoteList from "../../../../components/NoteList/NoteList";
-import NoteForm from "../../../../components/NoteForm/NoteForm";
 import Pagination from "../../../../components/Pagination/Pagination";
 import Loader from "../../../../components/Loader/Loader";
 
@@ -21,10 +18,7 @@ interface NotesClientProps {
 
 export default function NotesClient({ valTag }: NotesClientProps) {
   const [search, setSearch] = useState("");
-  // const [tag, setTag] = useState(valTag);
   const [currentPage, setCurrentPage] = useState(1);
-  // const [isOpenModal, setisOpenModal] = useState(false);
-
   const tag = valTag;
 
   const {
@@ -41,9 +35,6 @@ export default function NotesClient({ valTag }: NotesClientProps) {
     refetchOnMount: false,
   });
 
-  // const handleClick = () => {
-  //   setisOpenModal(!isOpenModal);
-  // };
   const updateSearchQuery = useDebouncedCallback((value: string) => {
     setSearch(value);
     setCurrentPage(1);
@@ -53,6 +44,8 @@ export default function NotesClient({ valTag }: NotesClientProps) {
       toast("Failed to load notes or no matches found. Please try again.");
     }
   }, [isError, notes]);
+
+  const router = useRouter();
 
   return (
     <div className={css.app}>
@@ -68,7 +61,7 @@ export default function NotesClient({ valTag }: NotesClientProps) {
         )}
 
         {
-          <button className={css.button} onClick={() => useRouter().push("/notes/action/create")}>
+          <button className={css.button} onClick={() => router.push("/notes/action/create")}>
             Create note +
           </button>
         }
@@ -83,11 +76,10 @@ export default function NotesClient({ valTag }: NotesClientProps) {
           },
         }}
       />
-      {/* {isOpenModal && (
-        <Modal onClose={handleClick} isOpen={isOpenModal}>
-          <NoteForm onClose={handleClick} />
-        </Modal>
-      )} */}
+      {isError && toast(<p className={css.error}>Failed to load notes. Please try again.</p>)}
+      {isSuccess && notes?.notes.length === 0 && (
+        toast(<p className={css.noNotes}>No notes found. Please try a different search or tag.</p>)
+      )}
 
       {isSuccess && notes && <NoteList notes={notes?.notes} />}
     </div>
