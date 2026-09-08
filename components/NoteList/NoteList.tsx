@@ -36,8 +36,7 @@ function NoteList({ notes }: NoteListProps) {
             </Link>
             <button
               className={css.button}
-              onClick={() => mutateDelete(note.id)}
-            >
+              onClick={() => mutateDelete(note.id)}>
               Delete
             </button>
           </div>

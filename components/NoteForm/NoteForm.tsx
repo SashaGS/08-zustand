@@ -10,8 +10,8 @@ import { useNoteStore } from "../../lib/store/noteStore";
 
 function NoteForm() {
   const queryClient = useQueryClient();
-  const fieldId = useId();
-  const router = useRouter();
+  const fieldId     = useId();
+  const router      = useRouter();
   const { draft, setDraft, clearDraft } = useNoteStore();
 
   const { mutate } = useMutation({
@@ -58,7 +58,7 @@ function NoteForm() {
             required
             minLength={3}
             maxLength={50}
-            value={draft.title}
+            defaultValue={draft.title}
             onChange={(e) => setDraft({ title: e.target.value })}
           />
         </div>
@@ -71,7 +71,7 @@ function NoteForm() {
             rows={8}
             className={css.textarea}
             maxLength={500}
-            value={draft.content}
+            defaultValue={draft.content}
             onChange={(e) => setDraft({ content: e.target.value })}
           />
         </div>
@@ -83,7 +83,7 @@ function NoteForm() {
             name="tag"
             className={css.select}
             required
-            value={draft.tag}
+            defaultValue={draft.tag}
             onChange={(e) => setDraft({ tag: e.target.value })}
           >
             <option value="Todo">Todo</option>

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from 'zustand/middleware';
 
 interface NoteDraft {
   title: string;
@@ -18,9 +19,17 @@ const initialDraft: NoteDraft = {
   tag: "Todo",
 };
 
-export const useNoteStore = create<NoteStore>((set) => ({
-  draft: initialDraft,
-  setDraft: (draft) =>
-    set((state) => ({ draft: { ...state.draft, ...draft } })),
-  clearDraft: () => set({ draft: initialDraft }),
-}));
+export const useNoteStore = create<NoteStore>()(
+  persist(
+    (set) => ({
+      draft: initialDraft,
+      setDraft: (draft) =>
+        set((state) => ({ draft: { ...state.draft, ...draft } })),
+      clearDraft: () => set({ draft: initialDraft }),
+    }),
+    {
+      name: "note-draft",
+      partialize: (state) => ({ draft: state.draft }),
+    }
+  )
+);
