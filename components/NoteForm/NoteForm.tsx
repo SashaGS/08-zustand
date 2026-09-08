@@ -17,8 +17,8 @@ function NoteForm() {
   const { mutate } = useMutation({
     mutationFn: addNote,
     onSuccess() {
-      // queryClient.invalidateQueries({ queryKey: ["note"], exact: false });
-      queryClient.refetchQueries({ queryKey: ["note"], exact: false });
+      queryClient.invalidateQueries({ queryKey: ["note"], exact: false });
+      // queryClient.refetchQueries({ queryKey: ["note"], exact: false });
       clearDraft();
       router.back();
     },
@@ -27,18 +27,13 @@ function NoteForm() {
     },
   });
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(formData: FormData):Promise<void> {
     const values = {
       title: formData.get("title") as string,
       content: formData.get("content") as string,
       tag: formData.get("tag") as string,
     };
-
-    try {
       mutate({ ...values });
-    } catch (error) {
-      toast(`Error adding note ${error}`);
-    }
   }
 
   const handleCancel = () => {

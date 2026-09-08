@@ -27,7 +27,7 @@ export default function NotesClient({ valTag }: NotesClientProps) {
     isError,
     isSuccess,
   } = useQuery({
-    queryKey: ["note", search, tag, currentPage],
+    queryKey: ["notes", search, tag, currentPage],
     queryFn: () => fetchNotes(search, tag, currentPage),
     retry: 1,
     staleTime: 5000,
@@ -76,9 +76,9 @@ export default function NotesClient({ valTag }: NotesClientProps) {
           },
         }}
       />
-      {isError && toast(<p className={css.error}>Failed to load notes. Please try again.</p>)}
+      {isError && <p className={css.error}>Failed to load notes. Please try again.</p>}
       {isSuccess && notes?.notes.length === 0 && (
-        toast(<p className={css.noNotes}>No notes found. Please try a different search or tag.</p>)
+        <p className={css.noNotes}>No notes found. Please try a different search or tag.</p>
       )}
 
       {isSuccess && notes && <NoteList notes={notes?.notes} />}
