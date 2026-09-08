@@ -6,21 +6,20 @@ import { useId } from "react";
 import { addNote } from "../../lib/api/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-
-// interface NoteFormProps {
-//   onClose: () => void;
-// }
+import { useNoteStore } from "../../lib/store/noteStore";
 
 function NoteForm() {
   const queryClient = useQueryClient();
   const fieldId = useId();
   const router = useRouter();
+  const { draft, setDraft, clearDraft } = useNoteStore();
 
   const { mutate } = useMutation({
     mutationFn: addNote,
     onSuccess() {
       // queryClient.invalidateQueries({ queryKey: ["note"], exact: false });
       queryClient.refetchQueries({ queryKey: ["note"], exact: false });
+      clearDraft();
       router.back();
     },
     onError(error) {
@@ -44,10 +43,10 @@ function NoteForm() {
 
   const handleCancel = () => {
     router.back();
-  }
+  };
 
   return (
-    <form className={css.form} >
+    <form className={css.form}>
       <fieldset>
         <div className={css.formGroup}>
           <label htmlFor={`${fieldId}-title`}>Title</label>
@@ -59,6 +58,8 @@ function NoteForm() {
             required
             minLength={3}
             maxLength={50}
+            value={draft.title}
+            onChange={(e) => setDraft({ title: e.target.value })}
           />
         </div>
 
@@ -70,12 +71,21 @@ function NoteForm() {
             rows={8}
             className={css.textarea}
             maxLength={500}
+            value={draft.content}
+            onChange={(e) => setDraft({ content: e.target.value })}
           />
         </div>
 
         <div className={css.formGroup}>
           <label htmlFor={`${fieldId}-tag`}>Tag</label>
-          <select id={`${fieldId}-tag`} name="tag" className={css.select} required>
+          <select
+            id={`${fieldId}-tag`}
+            name="tag"
+            className={css.select}
+            required
+            value={draft.tag}
+            onChange={(e) => setDraft({ tag: e.target.value })}
+          >
             <option value="Todo">Todo</option>
             <option value="Work">Work</option>
             <option value="Personal">Personal</option>
@@ -94,7 +104,11 @@ function NoteForm() {
           >
             Cancel
           </button>
-          <button type="submit" className={css.submitButton} formAction={handleSubmit}>
+          <button
+            type="submit"
+            className={css.submitButton}
+            formAction={handleSubmit}
+          >
             Create note
           </button>
         </div>
