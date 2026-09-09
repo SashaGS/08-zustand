@@ -27,7 +27,7 @@ export default function NotesClient({ valTag }: NotesClientProps) {
     isError,
     isSuccess,
   } = useQuery({
-    queryKey: ["notes", search, tag, currentPage],
+    queryKey: ["note", search, tag, currentPage],
     queryFn: () => fetchNotes(search, tag, currentPage),
     retry: 1,
     staleTime: 5000,
