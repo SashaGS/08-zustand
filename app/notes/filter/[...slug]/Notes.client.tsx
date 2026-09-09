@@ -39,11 +39,16 @@ export default function NotesClient({ valTag }: NotesClientProps) {
     setSearch(value);
     setCurrentPage(1);
   }, 500);
-  useEffect(() => {
-    if (isError || notes?.notes.length === 0) {
-      toast("Failed to load notes or no matches found. Please try again.");
-    }
-  }, [isError, notes]);
+
+  // useEffect(() => {
+  //   if (isError || notes?.notes.length === 0) {
+  //     toast("Failed to load notes or no matches found. Please try again.");
+  //   }
+  // }, [isError, notes]);
+
+  if (isError || notes?.notes.length === 0) {
+    toast("Failed to load notes or no matches found. Please try again.");
+  }
 
   const router = useRouter();
 
