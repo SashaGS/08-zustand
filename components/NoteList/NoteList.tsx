@@ -16,7 +16,7 @@ function NoteList({ notes }: NoteListProps) {
   const { mutate: mutateDelete } = useMutation({
     mutationFn: deleteNote,
     onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ["note"] });
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
     onError(error) {
       toast(`Error deleting note ${error}`);
@@ -36,7 +36,8 @@ function NoteList({ notes }: NoteListProps) {
             </Link>
             <button
               className={css.button}
-              onClick={() => mutateDelete(note.id)}>
+              onClick={() => mutateDelete(note.id)}
+            >
               Delete
             </button>
           </div>

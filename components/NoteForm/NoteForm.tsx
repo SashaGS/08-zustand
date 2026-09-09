@@ -10,15 +10,15 @@ import { useNoteStore } from "../../lib/store/noteStore";
 
 function NoteForm() {
   const queryClient = useQueryClient();
-  const fieldId     = useId();
-  const router      = useRouter();
+  const fieldId = useId();
+  const router = useRouter();
   const { draft, setDraft, clearDraft } = useNoteStore();
 
   const { mutate } = useMutation({
     mutationFn: addNote,
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["note"], exact: false });
-      // queryClient.refetchQueries({ queryKey: ["note"], exact: false });
+      queryClient.refetchQueries({ queryKey: ["notes"], exact: false });
       clearDraft();
       router.back();
     },
@@ -27,13 +27,13 @@ function NoteForm() {
     },
   });
 
-  async function handleSubmit(formData: FormData):Promise<void> {
+  async function handleSubmit(formData: FormData): Promise<void> {
     const values = {
       title: formData.get("title") as string,
       content: formData.get("content") as string,
       tag: formData.get("tag") as string,
     };
-      mutate({ ...values });
+    mutate({ ...values });
   }
 
   const handleCancel = () => {

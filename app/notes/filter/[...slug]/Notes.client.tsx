@@ -27,7 +27,7 @@ export default function NotesClient({ valTag }: NotesClientProps) {
     isError,
     isSuccess,
   } = useQuery({
-    queryKey: ["note", search, tag, currentPage],
+    queryKey: ["notes", search, tag, currentPage],
     queryFn: () => fetchNotes(search, tag, currentPage),
     retry: 1,
     staleTime: 5000,
@@ -40,15 +40,6 @@ export default function NotesClient({ valTag }: NotesClientProps) {
     setCurrentPage(1);
   }, 500);
 
-  // useEffect(() => {
-  //   if (isError || notes?.notes.length === 0) {
-  //     toast("Failed to load notes or no matches found. Please try again.");
-  //   }
-  // }, [isError, notes]);
-
-  // if (isError || notes?.notes.length === 0) {
-  //   toast("Failed to load notes or no matches found. Please try again.");
-  // }
   useEffect(() => {
     if (isError) {
       toast.error("Failed to load notes. Please try again.", {
@@ -67,14 +58,6 @@ export default function NotesClient({ valTag }: NotesClientProps) {
     <div className={css.app}>
       <header className={css.toolbar}>
         {<SearchBox onSearchChange={onSearchChange} />}
-
-        {notes && (notes.totalPages ?? 1) > 1 && (
-          <Pagination
-            totalPages={notes.totalPages ?? 1}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-          />
-        )}
 
         {
           <button
@@ -105,6 +88,13 @@ export default function NotesClient({ valTag }: NotesClientProps) {
       )}
 
       {isSuccess && notes && <NoteList notes={notes?.notes} />}
+      {notes && (notes.totalPages ?? 1) > 1 && (
+        <Pagination
+          totalPages={notes.totalPages ?? 1}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 }
