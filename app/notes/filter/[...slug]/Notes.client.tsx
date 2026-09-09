@@ -35,7 +35,7 @@ export default function NotesClient({ valTag }: NotesClientProps) {
     refetchOnMount: false,
   });
 
-  const updateSearchQuery = useDebouncedCallback((value: string) => {
+  const onSearchChange = useDebouncedCallback((value: string) => {
     setSearch(value);
     setCurrentPage(1);
   }, 500);
@@ -50,9 +50,9 @@ export default function NotesClient({ valTag }: NotesClientProps) {
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        {<SearchBox updateSearchQuery={updateSearchQuery} />}
+        {<SearchBox onSearchChange={onSearchChange} />}
 
-        {notes && notes.notes.length > 0 && (notes.totalPages ?? 1) > 1 && (
+        {notes && (notes.totalPages ?? 1) > 1 && (
           <Pagination
             totalPages={notes.totalPages ?? 1}
             currentPage={currentPage}
@@ -61,7 +61,10 @@ export default function NotesClient({ valTag }: NotesClientProps) {
         )}
 
         {
-          <button className={css.button} onClick={() => router.push("/notes/action/create")}>
+          <button
+            className={css.button}
+            onClick={() => router.push("/notes/action/create")}
+          >
             Create note +
           </button>
         }
@@ -76,9 +79,13 @@ export default function NotesClient({ valTag }: NotesClientProps) {
           },
         }}
       />
-      {isError && <p className={css.error}>Failed to load notes. Please try again.</p>}
+      {isError && (
+        <p className={css.error}>Failed to load notes. Please try again.</p>
+      )}
       {isSuccess && notes?.notes.length === 0 && (
-        <p className={css.noNotes}>No notes found. Please try a different search or tag.</p>
+        <p className={css.noNotes}>
+          No notes found. Please try a different search or tag.
+        </p>
       )}
 
       {isSuccess && notes && <NoteList notes={notes?.notes} />}
